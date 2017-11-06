@@ -11,6 +11,8 @@ contract Test {
   uint256 public target;
   uint256 public hash;
 
+  mapping(uint120 => string) public domain;
+  
   function Test() {
     blockNumber = block.number;
     blockHashNow = block.blockhash(blockNumber);
@@ -18,6 +20,16 @@ contract Test {
     diff = 0x20ffffff;
   }
 
+  event Set(address from, uint120 input, string name);
+
+  // イベントを監視する関数
+  function set(uint120 input, string name) public returns(bool){
+    domain[input] = name;
+    Set(msg.sender, input, name);
+    return true;
+  }
+    
+  
   // blockHashを獲得する関数
   function getBlockHash(uint32 _prevNum) public returns(bytes32){
     return block.blockhash(blockNumber - _prevNum);
@@ -48,8 +60,11 @@ contract Test {
     return sha3(a);
   }
   // Sha3_4
-  function Sha3_4(address[] test) public returns(bytes32){
+  function Sha3_41(address[] test) public returns(bytes32){
     return sha3(test);
+  }
+  function Sha3_42(uint8[] a, address[] b) public returns(bytes32){
+    return sha3(a, b);
   }
   
   function Sha3_51(bytes20 a, bool b) public returns(bytes32){
